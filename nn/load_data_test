@@ -1,0 +1,6 @@
+import mnist_loader as mnist
+
+data = mnist.load_data()
+
+print(data)
+
