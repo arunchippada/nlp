@@ -85,8 +85,20 @@ else:
     reduced.to_csv(red_csv_file)
 
 words = ['barrels', 'bpd', 'ecuador', 'energy', 'industry', 'kuwait', 'oil', 'output', 'petroleum', 'iraq']
+vectors = reduced.loc[words]
+plot_vectors(vectors)
 
-plot_vectors(reduced.loc[words])
+# normalizing vectors to unit length, so that closeness of two vectors is directional closeness
+# if two words have similar coocurrence - have similar ratios of occurence for each center word
+# but are different in terms of overall frequency (i.e. one word appears more frequently than another across the
+# documents), the normalization will remove the affect of the frequency
+lengths = np.linalg.norm(vectors, axis=1)
+
+norm_vectors = vectors/np.array([lengths]).transpose()
+print(norm_vectors)
+
+plot_vectors(norm_vectors, fig=2)
+
 plt.show()
 
 
