@@ -1,5 +1,4 @@
-import mnist_loader as mnist
-import network
+from mnist import mnist_loader as mnist, network
 
 training, validation, test = mnist.load_data_wrapper()
 network30 = network.Network([784, 10])

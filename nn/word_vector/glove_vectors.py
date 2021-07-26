@@ -53,51 +53,62 @@ if 0:
 # analogy - finds vectors that are close to a given vector (which is an arithmetic on the positive and negative vectors)
 # Removing the directionality and considering only the angular distance (cosine distance) is applicable when we are
 # interested in the closeness to a given vector
-most_similar = model.most_similar(positive=['woman', 'king'], negative=['man']);
-pprint.pprint(most_similar)
+if 0:
+    most_similar = model.most_similar(positive=['woman', 'king'], negative=['man']);
+    pprint.pprint(most_similar)
 
-# daughter
-most_similar = model.most_similar(positive=['woman', 'son'], negative=['man']);
-pprint.pprint(most_similar)
+    # daughter
+    most_similar = model.most_similar(positive=['woman', 'son'], negative=['man']);
+    pprint.pprint(most_similar)
 
-# ships is the first. sea is 7th in this list
-most_similar = model.most_similar(positive=['ship', 'road'], negative=['car']);
-pprint.pprint(most_similar)
+    # ships is the first. sea is 7th in this list
+    most_similar = model.most_similar(positive=['ship', 'road'], negative=['car']);
+    pprint.pprint(most_similar)
 
-# hear is 2nd
-most_similar = model.most_similar(positive=['ear', 'see'], negative=['eye']);
-pprint.pprint(most_similar)
+    # hear is 2nd
+    most_similar = model.most_similar(positive=['ear', 'see'], negative=['eye']);
+    pprint.pprint(most_similar)
 
-# bias
-most_similar = model.most_similar(positive=['man', 'worker'], negative=['woman']);
-pprint.pprint(most_similar)
+    # bias
+    most_similar = model.most_similar(positive=['man', 'worker'], negative=['woman']);
+    pprint.pprint(most_similar)
 
-most_similar = model.most_similar(positive=['woman', 'worker'], negative=['man']);
-pprint.pprint(most_similar)
+    most_similar = model.most_similar(positive=['woman', 'worker'], negative=['man']);
+    pprint.pprint(most_similar)
 
-positive_words = ['white', 'worker']
-negative_words = ['black']
-most_similar = model.most_similar(positive=positive_words, negative=negative_words);
-print(f"positive {positive_words} {negative_words}")
-pprint.pprint(most_similar)
+    positive_words = ['white', 'worker']
+    negative_words = ['black']
+    most_similar = model.most_similar(positive=positive_words, negative=negative_words);
+    print(f"positive {positive_words} {negative_words}")
+    pprint.pprint(most_similar)
 
-# immigrant, migrant, unemployed
-positive_words = ['black', 'worker']
-negative_words = ['white']
-most_similar = model.most_similar(positive=positive_words, negative=negative_words);
-print(f"positive {positive_words} {negative_words}")
-pprint.pprint(most_similar)
+    # immigrant, migrant, unemployed
+    positive_words = ['black', 'worker']
+    negative_words = ['white']
+    most_similar = model.most_similar(positive=positive_words, negative=negative_words);
+    print(f"positive {positive_words} {negative_words}")
+    pprint.pprint(most_similar)
 
-# football, baseball
-positive_words = ['man', 'player']
-negative_words = ['woman']
-most_similar = model.most_similar(positive=positive_words, negative=negative_words);
-print(f"positive {positive_words} {negative_words}")
-pprint.pprint(most_similar)
+    # football, baseball
+    positive_words = ['man', 'player']
+    negative_words = ['woman']
+    most_similar = model.most_similar(positive=positive_words, negative=negative_words);
+    print(f"positive {positive_words} {negative_words}")
+    pprint.pprint(most_similar)
 
-# athlete, professional, golfer, basketball
-positive_words = ['woman', 'player']
-negative_words = ['man']
-most_similar = model.most_similar(positive=positive_words, negative=negative_words);
-print(f"positive {positive_words} {negative_words}")
-pprint.pprint(most_similar)
+    # athlete, professional, golfer, basketball
+    positive_words = ['woman', 'player']
+    negative_words = ['man']
+    most_similar = model.most_similar(positive=positive_words, negative=negative_words);
+    print(f"positive {positive_words} {negative_words}")
+    pprint.pprint(most_similar)
+
+# odd man out
+odd = model.doesnt_match(['breakfast', 'cereal', 'lunch', 'dinner']);
+print(odd)
+
+odd = model.doesnt_match(['lion', 'tiger', 'bear', 'cow']);
+print(odd)
+
+odd = model.doesnt_match(['water', 'oil', 'rock', 'coffee']);
+print(odd)
