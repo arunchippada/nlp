@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-import torch.nn as nn
 
 import pprint
 pp = pprint.PrettyPrinter()
@@ -34,6 +33,17 @@ b = np.array([
     [0, 1]
 ])
 
+
+list1 = [1]
+a = np.array(list1)
+t = torch.tensor(list1)
+pp.pprint({
+    'list multiply': list1 * 6,
+    'np array multiply scalar': a * 6,
+    'tensor multiply scalar': t * 6,
+})
+
+
 # numpy matmul
 c = np.matmul(n, b)
 pp.pprint(c)
@@ -46,3 +56,28 @@ c = a @ b.T
 pp.pprint(c)
 pp.pprint(c.shape)
 
+# matmul applies mat multiplication at the lowest dimension
+# and repeating across higher dimensions
+a = torch.ones((5, 4, 3)) * 6
+b = torch.ones(3) * 2
+c = a @ b.T
+pp.pprint(c)
+pp.pprint(c.shape)
+
+a = torch.ones((5, 4, 3)) * 6
+b = torch.ones(3, 2) * 2
+c = a @ b
+pp.pprint(c)
+pp.pprint(c.shape)
+
+
+# the propagation of matrix operation (add, multiply etc) at lower dimension, to higher dimension
+# In other words, repeating the operation at higher dimension
+# comes from numpy.  Example below with add operation for 5 x 4 x 3 matrix with 4 x 3 matrix
+# The add operation between the 4 x 3 matrices is propagated to the third dimension
+n1 = np.ones((5, 4, 3))
+n2 = np.array([[2, 3, 4],
+              [3, 4, 5],
+              [4, 5, 6],
+              [5, 6, 7]])
+pp.pprint(n1 + n2)

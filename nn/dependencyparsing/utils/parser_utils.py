@@ -11,7 +11,7 @@ import os
 import logging
 from collections import Counter
 from . general_utils import get_minibatches
-from parser_transitions import minibatch_parse
+from . parser_transitions import minibatch_parse
 
 from tqdm import tqdm
 import torch
@@ -389,7 +389,7 @@ def load_and_preprocess_data(reduced=True):
     start = time.time()
     train_set = parser.vectorize(train_set)
     dev_set = parser.vectorize(dev_set)
-    test_set = parser.vectorize(test_set)
+    vect_test_set = parser.vectorize(test_set)
     print("took {:.2f} seconds".format(time.time() - start))
 
     print("Preprocessing training data...",)
@@ -397,7 +397,7 @@ def load_and_preprocess_data(reduced=True):
     train_examples = parser.create_instances(train_set)
     print("took {:.2f} seconds".format(time.time() - start))
 
-    return parser, embeddings_matrix, train_examples, dev_set, test_set,
+    return parser, embeddings_matrix, train_examples, dev_set, vect_test_set, test_set
 
 
 class AverageMeter(object):

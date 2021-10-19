@@ -20,6 +20,9 @@ from tqdm import tqdm
 from parser_model import ParserModel
 from utils.parser_utils import minibatches, load_and_preprocess_data, AverageMeter
 
+import pprint
+pp = pprint.PrettyPrinter()
+
 parser = argparse.ArgumentParser(description='Train neural dependency parser in pytorch')
 parser.add_argument('-d', '--debug', action='store_true', help='whether to enter debug mode')
 args = parser.parse_args()
@@ -40,22 +43,8 @@ def train(parser, train_data, dev_data, output_path, batch_size=1024, n_epochs=1
     """
     best_dev_UAS = 0
 
-
-    ### YOUR CODE HERE (~2-7 lines)
-    ### TODO:
-    ###      1) Construct Adam Optimizer in variable `optimizer`
-    ###      2) Construct the Cross Entropy Loss Function in variable `loss_func` with `mean`
-    ###         reduction (default)
-    ###
-    ### Hint: Use `parser.model.parameters()` to pass optimizer
-    ###       necessary parameters to tune.
-    ### Please see the following docs for support:
-    ###     Adam Optimizer: https://pytorch.org/docs/stable/optim.html
-    ###     Cross Entropy Loss: https://pytorch.org/docs/stable/nn.html#crossentropyloss
-
-
-
-    ### END YOUR CODE
+    optimizer = optim.Adam(parser.model.parameters(), lr)
+    loss_func = nn.CrossEntropyLoss()
 
     for epoch in range(n_epochs):
         print("Epoch {:} out of {:}".format(epoch + 1, n_epochs))
@@ -94,22 +83,10 @@ def train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_si
             train_x = torch.from_numpy(train_x).long()
             train_y = torch.from_numpy(train_y.nonzero()[1]).long()
 
-            ### YOUR CODE HERE (~4-10 lines)
-            ### TODO:
-            ###      1) Run train_x forward through model to produce `logits`
-            ###      2) Use the `loss_func` parameter to apply the PyTorch CrossEntropyLoss function.
-            ###         This will take `logits` and `train_y` as inputs. It will output the CrossEntropyLoss
-            ###         between softmax(`logits`) and `train_y`. Remember that softmax(`logits`)
-            ###         are the predictions (y^ from the PDF).
-            ###      3) Backprop losses
-            ###      4) Take step with the optimizer
-            ### Please see the following docs for support:
-            ###     Optimizer Step: https://pytorch.org/docs/stable/optim.html#optimizer-step
-
-
-
-
-            ### END YOUR CODE
+            logits = model(train_x)
+            loss = loss_func(logits, train_y)
+            loss.backward()
+            optimizer.step()
             prog.update(1)
             loss_meter.update(loss.item())
 
@@ -122,6 +99,15 @@ def train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_si
     return dev_UAS
 
 
+def write_data(unvect_data, vect_data, dependencies):
+    for sentence, vect_sentence, d in zip(unvect_data, vect_data, dependencies):
+        pp.pprint({
+            'sentence': sentence['word'],
+            'vect_sentence': vect_sentence['word'],
+            'dependencies': d
+        })
+
+
 if __name__ == "__main__":
     debug = args.debug
 
@@ -130,7 +116,7 @@ if __name__ == "__main__":
     print(80 * "=")
     print("INITIALIZING")
     print(80 * "=")
-    parser, embeddings, train_data, dev_data, test_data = load_and_preprocess_data(debug)
+    parser, embeddings, train_data, dev_data, test_data, unvect_test_data = load_and_preprocess_data(debug)
 
     start = time.time()
     model = ParserModel(embeddings)
@@ -157,5 +143,7 @@ if __name__ == "__main__":
         print("Final evaluation on test set",)
         parser.model.eval()
         UAS, dependencies = parser.parse(test_data)
+        write_data(unvect_test_data, test_data, dependencies)
+
         print("- test UAS: {:.2f}".format(UAS * 100.0))
         print("Done!")
