@@ -29,9 +29,19 @@ pp.pprint({
     'unflatten_shape': unflatten_1,
 })
 
-# view to keen number of dimensions the same, but different dimension size
+# view to keep number of dimensions the same, but different dimension size
 v = index_select_flatten.view(t1.shape[0], -1)
 pp.pprint({
     'view': v
 })
+
+t2 = torch.randint(0, 10, (2, 3, 5))
+t3 = t2.view(3, 2, -1)
+t4 = t2.permute(1, 0, 2)
+pp.pprint({
+    'original tensor': t2,
+    'view doesnt change the underlying order of elements': t3,
+    'permute changes underlying order of elements. similar to transpose but can work with more than 2 dims': t4
+})
+
 

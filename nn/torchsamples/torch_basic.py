@@ -52,9 +52,29 @@ pp.pprint(c.shape)
 # torch matmul
 a = torch.ones((4, 3)) * 6
 b = torch.ones(3) * 2
-c = a @ b.T
-pp.pprint(c)
-pp.pprint(c.shape)
+c = b.T
+d = a @ c
+pp.pprint({
+    'a.shape': a.shape,
+    'tensor multiply scalar': b,
+    'tensor multiply scalar shape': b.shape,
+    'transpose of single dimension matrix returns same matrix': c,
+    'transpose of single dimension matrix shape': c.shape,
+    'matrix multiply': d,
+    'matrix multiply shape': d.shape,
+})
+
+b = torch.ones(3, 1) * 2
+c = b.T
+d = a @ b
+pp.pprint({
+    'tensor multiply scalar': b,
+    'tensor multiply scalar shape': b.shape,
+    'transpose of two dim matrix': c,
+    'c.shape': c.shape,
+    'matrix multiply': d,
+    'matrix multiply shape': d.shape,
+})
 
 # matmul applies mat multiplication at the lowest dimension
 # and repeating across higher dimensions
