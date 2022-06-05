@@ -47,3 +47,17 @@ epoch 1, iter 460, avg. loss 150.20, avg. ppl 310.13 cum. examples 14720, speed 
 epoch 2, iter 470, avg. loss 152.26, avg. ppl 290.60 cum. examples 15015, speed 28.75 words/sec, time elapsed 11882.83 sec
 epoch 2, iter 480, avg. loss 148.10, avg. ppl 267.87 cum. examples 15335, speed 33.77 words/sec, time elapsed 12133.82 sec
 epoch 2, iter 490, avg. loss 144.93, avg. ppl 274.48 cum. examples 15655, speed 28.18 words/sec, time elapsed 12426.91 sec
+
+on cpu collab
+
+uniformly initialize parameters [-0.100000, +0.100000]
+use device: cpu
+begin Maximum Likelihood training
+epoch 1, iter 10, avg. loss 236.45, avg. ppl 9935.16 cum. examples 320, speed 59.60 words/sec, time elapsed 137.94 sec
+epoch 1, iter 20, avg. loss 231.86, avg. ppl 5754.01 cum. examples 640, speed 59.19 words/sec, time elapsed 282.72 sec
+epoch 1, iter 30, avg. loss 209.58, avg. ppl 2986.86 cum. examples 960, speed 54.04 words/sec, time elapsed 437.82 sec
+epoch 1, iter 40, avg. loss 206.80, avg. ppl 1758.82 cum. examples 1280, speed 53.67 words/sec, time elapsed 602.83 sec
+epoch 1, iter 50, avg. loss 193.23, avg. ppl 1155.39 cum. examples 1600, speed 60.89 words/sec, time elapsed 746.84 sec
+epoch 1, iter 60, avg. loss 178.44, avg. ppl 890.14 cum. examples 1920, speed 61.35 words/sec, time elapsed 883.88 sec
+epoch 1, iter 70, avg. loss 176.44, avg. ppl 708.34 cum. examples 2240, speed 55.80 words/sec, time elapsed 1038.05 sec
+epoch 1, iter 80, avg. loss 172.94, avg. ppl 686.80 cum. examples 2560, speed 56.91 words/sec, time elapsed 1186.91 sec
