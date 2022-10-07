@@ -183,11 +183,11 @@ if __name__ == '__main__':
 
     if args.dataset_type == 'namedata':
         # Even if it hasn't been implemented, we use it to define the vocab
-        corruption_dataset = CharCorruptionDataset(open('wiki.txt').read(), 128) 
+        corruption_dataset = CharCorruptionDataset(open('wiki.txt', encoding="utf8").read(), 128)
         # Make the name dataset
         name_dataset = NameDataset(corruption_dataset,
-            open('birth_places_train.tsv').read())
-        for _, example in zip(range(4), name_dataset):
+            open('birth_places_train.tsv', encoding="utf8").read())
+        for example in name_dataset:
             x, y = example
             print('x:', ''.join([name_dataset.itos[int(c)] for c in x]))
             print('y:', ''.join([name_dataset.itos[int(c)] for c in y]))

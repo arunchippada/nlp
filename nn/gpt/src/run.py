@@ -8,8 +8,8 @@ import argparse
 random.seed(0)
 
 import dataset
-import model
-import trainer
+from model import GPTConfig, GPT
+from trainer import TrainerConfig, Trainer
 import utils
 
 argp = argparse.ArgumentParser()
@@ -35,6 +35,7 @@ args = argp.parse_args()
 
 # Save the device
 device = torch.cuda.current_device() if torch.cuda.is_available() else 'cpu'
+print("Using device {}".format(device))
 
 # Keep the block size 128
 # Why is the pretraining corpus always required (even if we're not pretraining?)
@@ -42,12 +43,12 @@ device = torch.cuda.current_device() if torch.cuda.is_available() else 'cpu'
 # (that is, the same mapping from character to integer, and we build the 
 # vocab from the pretraining corpus.)
 block_size = 128
-text = open(args.pretrain_corpus_path).read()
+text = open(args.pretrain_corpus_path, encoding="utf8").read()
 pretrain_dataset = dataset.CharCorruptionDataset(text, block_size)
 
 # We don't suggest you change these hyperparameters, as they're known to work.
 # use them for both the vanilla and the synthesizer models
-mconf = model.GPTConfig(pretrain_dataset.vocab_size, pretrain_dataset.block_size,
+mconf = GPTConfig(pretrain_dataset.vocab_size, pretrain_dataset.block_size,
     n_layer=4, n_head=8, n_embd=256)
 
 """
@@ -55,7 +56,9 @@ Don't change above here; write your code below
 """
 
 if args.variant == 'vanilla':
-    pass # TODO [part c]: Make some model here
+    # DONE [part c]: Make some model here
+    model = GPT(mconf)
+
 elif args.variant == 'synthesizer':
     pass # TODO [part g]: Make some other model here
 
@@ -84,7 +87,7 @@ if args.function == 'pretrain':
 elif args.function == 'finetune':
     assert args.writing_params_path is not None
     assert args.finetune_corpus_path is not None
-    # TODO [part c] [part f]:
+    # TODO [part f]:
     # - Given:
     #     1. A finetuning corpus specified in args.finetune_corpus_path
     #     2. A path args.reading_params_path containing pretrained model
@@ -112,12 +115,29 @@ elif args.function == 'finetune':
     #         warmup_tokens=512*20
     #         final_tokens=200*len(pretrain_dataset)*block_size
     #         num_workers=4
-    raise NotImplementedError
+
+    finetune_dataset = dataset.NameDataset(pretrain_dataset,
+                                                 open(args.finetune_corpus_path, encoding="utf8").read())
+    tconf = TrainerConfig(
+        max_epochs=75,
+        batch_size=256,
+        learning_rate=6e-4,
+        lr_decay=True,
+        warmup_tokens=512*20,
+        final_tokens=200*len(pretrain_dataset)*block_size,
+        # num_workers=4,
+        ckpt_path=args.writing_params_path
+    )
+    trainer = Trainer(model, finetune_dataset, None, tconf)
+    trainer.train()
+    trainer.save_checkpoint()
+
 elif args.function == 'evaluate':
     assert args.outputs_path is not None
     assert args.reading_params_path is not None
     assert args.eval_corpus_path is not None
     model.load_state_dict(torch.load(args.reading_params_path))
+    model = model.to(device)
     correct = 0
     total = 0
     with open(args.outputs_path, 'w') as fout:
