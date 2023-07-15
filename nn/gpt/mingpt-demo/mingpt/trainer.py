@@ -31,6 +31,7 @@ class TrainerConfig:
     # checkpoint settings
     ckpt_path = None
     num_workers = 0 # for DataLoader
+    loss_target = 5
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
@@ -109,6 +110,9 @@ class Trainer:
 
                     # report progress
                     pbar.set_description(f"epoch {epoch+1} iter {it}: train loss {loss.item():.5f}. lr {lr:e}")
+
+                    if loss.item() < config.loss_target:
+                        break
 
             if not is_train:
                 test_loss = float(np.mean(losses))
